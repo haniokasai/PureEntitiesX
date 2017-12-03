@@ -40,7 +40,7 @@ use revivalpmmp\pureentities\entity\animal\walking\Cow;
 use revivalpmmp\pureentities\entity\animal\walking\Mooshroom;
 use revivalpmmp\pureentities\entity\animal\walking\Ocelot;
 use revivalpmmp\pureentities\entity\animal\walking\Pig;
-use revivalpmmp\pureentities\entity\animal\walking\Rabbit;
+use revivalpmmp\pureentities\entity\animal\jumping\Rabbit;
 use revivalpmmp\pureentities\entity\animal\walking\Sheep;
 use revivalpmmp\pureentities\entity\monster\flying\Blaze;
 use revivalpmmp\pureentities\entity\monster\flying\Ghast;
@@ -262,6 +262,7 @@ class PureEntities extends PluginBase implements CommandExecutor{
 	 */
 	public function scheduleCreatureSpawn(Position $pos, int $entityid, Level $level, string $type, bool $baby = false, Entity $parentEntity = null, Player $owner = null){
 		$this->getServer()->getPluginManager()->callEvent($event = new CreatureSpawnEvent($this, $pos, $entityid, $level, $type));
+
 		if($event->isCancelled()){
 			return null;
 		}else{
@@ -337,7 +338,7 @@ class PureEntities extends PluginBase implements CommandExecutor{
 	public static function getSuitableHeightPosition($x, $y, $z, Level $level){
 		$newPosition = null;
 		$id = $level->getBlockIdAt($x, $y, $z);
-		if($id == 0){ // we found an air block - we need to search down step by step to get the correct block which is not a "AIR" block
+		if($id == 0){ // we found an air block - we need to search down step by step to get the correct block which is not an "AIR" block
 			$air = true;
 			$y = $y - 1;
 			while($air){
