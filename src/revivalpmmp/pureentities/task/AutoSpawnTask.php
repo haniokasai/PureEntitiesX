@@ -38,6 +38,10 @@ class AutoSpawnTask extends PluginTask{
 	// Friendly Mobs only generate every 400 ticks
 	private $lastFriendlyTick;
 	private $spawnFriendlyMobsAllowed;
+	private $hostileMobs = 0;
+	private $passiveDryMobs = 0;
+	private $passiveWetMobs = 0;
+	private $mobCap = 255;
 
 	public function __construct(PureEntities $plugin){
 		parent::__construct($plugin);
@@ -47,11 +51,37 @@ class AutoSpawnTask extends PluginTask{
 
 	public function onRun(int $currentTick){
 		PureEntities::logOutput("AutoSpawnTask: onRun ($currentTick)", PureEntities::DEBUG);
-		PeTimings::startTiming("AutoSpawnTask: Start");
+		PeTimings::startTiming("AutoSpawnTask");
 
 		foreach($this->plugin->getServer()->getLevels() as $level){
 			if(count($this->spawnerWorlds) > 0 and !in_array($level->getName(), $this->spawnerWorlds)){
 				continue;
+			}
+			$this->hostileMobs = 0;
+			$this->passiveDryMobs = 0;
+			$this->passiveWetMobs = 0;
+
+
+			foreach($level->getEntities() as $entity) {
+				if(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::HOSTILE_MOBS)){
+					$this->hostileMobs++;
+				} elseif(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::PASSIVE_DRY_MOBS)) {
+					$this->passiveDryMobs++;
+				} elseif(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::PASSIVE_WET_MOBS)){
+					$this->passiveWetMobs++;
+				}
+			}
+			PureEntities::logOutput("AutoSpawnTask: Hostiles = $this->hostileMobs");
+			PureEntities::logOutput("AutoSpawnTask: Passives(Dry) = $this->passiveDryMobs");
+			PureEntities::logOutput("AutoSpawnTask: Passives(Wet) = $this->passiveWetMobs");
+			$total = ($this->hostileMobs + $this->passiveWetMobs + $this->passiveDryMobs);
+
+			if($total >= $this->mobCap) {
+				PureEntities::logOutput("AutoSpawnTask: Stopping AutoSpawn due to MobCap");
+				PureEntities::logOutput("AutoSpawnTask: Mob Total = $total");
+
+				PeTimings::stopTiming("AutoSpawnTask");
+				return;
 			}
 			$playerLocations = [];
 
@@ -80,21 +110,29 @@ class AutoSpawnTask extends PluginTask{
 
 
 				foreach($spawnMap as $chunk){
-					$center = $this->getRandomLocationInChunk($chunk);
+					$center = $this->getRandomLocationInChunk(new Vector2($chunk[0], $chunk[1]));
 					$mob = null;
+					$type = null;
 					if($this->spawnFriendlyMobsAllowed and mt_rand(0,1) === 1){
-						$mob = array_rand(Data::PASSIVE_MOBS);
+						// TODO: Spawn water creatures.
+						$mob = Data::PASSIVE_DRY_MOBS[array_rand(Data::PASSIVE_DRY_MOBS)];
+
+						$type = "passive";
 					} else {
-						array_rand(Data::HOSTILE_MOBS);
+						$mob = Data::HOSTILE_MOBS[array_rand(Data::HOSTILE_MOBS)];
+						$type = "hostile";
 					}
 
-					if($this->isValidPackCenter($center, $level)){
+					$mobId = Data::NETWORK_IDS[$mob];
 
+					if($this->isValidPackCenter($center, $level)){
+						$this->spawnPackToLevel($center, $mobId, $level, $type);
 					}
 				}
 
 			}
 		}
+		PeTimings::stopTiming("AutoSpawnTask", true);
 	}
 
 
@@ -170,21 +208,30 @@ class AutoSpawnTask extends PluginTask{
 		}
 	}
 
-	protected function spawnPackToLevel(Position $center, int $entityId, Level $level, string $type, bool $isBaby = false) : bool{
+	protected function spawnPackToLevel(Vector3 $center, int $entityId, Level $level, string $type, bool $isBaby = false) : bool{
 
 		// TODO Update to change $maxPackSize based on Mob
 		$maxPackSize = 4;
 		$currentPackSize = 0;
 
 		for($attempts = 0; $attempts <= 12 or $currentPackSize < $maxPackSize; $attempts++){
-			$x = mt_rand(-20,20) + ;
+			$x = mt_rand(-20,20) + $center->x;
+			$z = mt_rand(-20,20) + $center->x;
+			$pos = new Position($x, $center->y, $z, $level);
+			if($this->isValidSpawnLocation($pos)){
+				return PureEntities::getInstance()->scheduleCreatureSpawn($pos, $entityId, $level, $type, $isBaby) !== null;
+			}
 		}
+		return false;
 
-		$pos->y += Data::HEIGHTS[$entityId];
-		return PureEntities::getInstance()->scheduleCreatureSpawn($pos, $entityId, $level, $type, $isBaby) !== null;
 	}
 
 	private function isValidSpawnLocation(Position $spawnLocation) {
-		
+		if($spawnLocation->level->getBlockAt(!$spawnLocation->x, $spawnLocation->y - 1, $spawnLocation->x)->isTransparent()
+		and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y, $spawnLocation->x)->isTransparent()
+		and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->x)->isTransparent()) {
+			return true;
+		}
+		return false;
 	}
 }

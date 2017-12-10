@@ -224,7 +224,7 @@ interface Data{
 		"zombie_villager" => 44
 	);
 
-	const PASSIVE_MOBS = array(
+	const PASSIVE_DRY_MOBS = array(
 		"bat",
 		"chicken",
 		"cow",
@@ -240,9 +240,13 @@ interface Data{
 		"rabbit",
 		"sheep",
 		"skeleton_horse",
-		"squid",
 		"villager"
 	);
+
+	const PASSIVE_WET_MOBS = array(
+		"squid"
+	);
+
 	const HOSTILE_MOBS = array(
 		"blaze",
 		"cave_spider",
