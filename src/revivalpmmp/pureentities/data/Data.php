@@ -224,4 +224,53 @@ interface Data{
 		"zombie_villager" => 44
 	);
 
+	const PASSIVE_MOBS = array(
+		"bat",
+		"chicken",
+		"cow",
+		"donkey",
+		"horse",
+		"husk",
+		"llama",
+		"mooshroom",
+		"mule",
+		"ocelot",
+		"parrot",
+		"pig",
+		"rabbit",
+		"sheep",
+		"skeleton_horse",
+		"squid",
+		"villager"
+	);
+	const HOSTILE_MOBS = array(
+		"blaze",
+		"cave_spider",
+		"creeper",
+		"enderman",
+		"endermite",
+		"evoker",
+		"ghast",
+		"guardian",
+		"husk",
+		"magma_cube",
+		"pig_zombie",
+		"polar_bear",
+		"shulker",
+		"silverfish",
+		"skeleton",
+		"slime",
+		"spider",
+		"stray",
+		"vex",
+		"vindicator",
+		"witch",
+		"wither_skeleton",
+		"wither",
+		"wolf",
+		"zombie",
+		"zombie_pigman",
+		"zombie_villager"
+	);
+
 }
