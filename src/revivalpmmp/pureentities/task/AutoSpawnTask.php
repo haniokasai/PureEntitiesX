@@ -83,17 +83,20 @@ class AutoSpawnTask extends PluginTask{
 				PeTimings::stopTiming("AutoSpawnTask");
 				return;
 			}
+
 			$playerLocations = [];
 
 
 			if(count($level->getPlayers()) > 0){
 				foreach($level->getPlayers() as $player){
+					if ($player->spawned){
 
-					/* Intentionally not converting directly to chunks here so
-					 * spawn locations can be compared to player locations to meet
-					 * distance requirements.
-					 */
-					array_push($playerLocations, $player->asVector3());
+						/* Intentionally not converting directly to chunks here so
+						 * spawn locations can be compared to player locations to meet
+						 * distance requirements.
+						 */
+						array_push($playerLocations, $player->asVector3());
+					}
 				}
 
 				$this->spawnFriendlyMobsAllowed = false;
@@ -214,11 +217,14 @@ class AutoSpawnTask extends PluginTask{
 		$maxPackSize = 4;
 		$currentPackSize = 0;
 
-		for($attempts = 0; $attempts <= 12 or $currentPackSize < $maxPackSize; $attempts++){
+		for($attempts = 0; $attempts <= 12 and $currentPackSize < $maxPackSize; $attempts++){
 			$x = mt_rand(-20,20) + $center->x;
-			$z = mt_rand(-20,20) + $center->x;
+			$z = mt_rand(-20,20) + $center->z;
 			$pos = new Position($x, $center->y, $z, $level);
+
 			if($this->isValidSpawnLocation($pos)){
+				PureEntities::logOutput("AutoSpawnTask: Spawning Mob to location: $x, $center->y, $z");
+				$currentPackSize++;
 				return PureEntities::getInstance()->scheduleCreatureSpawn($pos, $entityId, $level, $type, $isBaby) !== null;
 			}
 		}
@@ -227,9 +233,9 @@ class AutoSpawnTask extends PluginTask{
 	}
 
 	private function isValidSpawnLocation(Position $spawnLocation) {
-		if($spawnLocation->level->getBlockAt(!$spawnLocation->x, $spawnLocation->y - 1, $spawnLocation->x)->isTransparent()
-		and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y, $spawnLocation->x)->isTransparent()
-		and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->x)->isTransparent()) {
+		if(!$spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y - 1, $spawnLocation->z)->isTransparent()
+			and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y, $spawnLocation->z)->isTransparent()
+			and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->z)->isTransparent()) {
 			return true;
 		}
 		return false;
