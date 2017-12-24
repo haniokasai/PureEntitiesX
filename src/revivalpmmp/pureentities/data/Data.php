@@ -239,42 +239,36 @@ interface Data{
 		"pig",
 		"rabbit",
 		"sheep",
-		"skeleton_horse",
-		"villager"
 	);
 
 	const PASSIVE_WET_MOBS = array(
 		"squid"
 	);
 
-	const HOSTILE_MOBS = array(
-		"blaze",
+	const OVERWORLD_HOSTILE_MOBS = array(
 		"cave_spider",
 		"creeper",
 		"enderman",
-		"endermite",
-		"evoker",
-		"ghast",
 		"guardian",
 		"husk",
-		"magma_cube",
-		"pig_zombie",
 		"polar_bear",
-		"shulker",
-		"silverfish",
 		"skeleton",
 		"slime",
 		"spider",
 		"stray",
-		"vex",
-		"vindicator",
 		"witch",
-		"wither_skeleton",
-		"wither",
 		"wolf",
-		"zombie",
-		"zombie_pigman",
-		"zombie_villager"
+		"zombie"
+	);
+
+	const NETHER_HOSTILE_MOBS = array(
+		"blaze",
+		"enderman",
+		"ghast",
+		"magma_cube",
+		"skeleton",
+		"wither_skeleton",
+		"zombie_pigman"
 	);
 
 }

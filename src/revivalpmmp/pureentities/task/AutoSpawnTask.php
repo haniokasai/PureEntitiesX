@@ -19,6 +19,8 @@
 
 namespace revivalpmmp\pureentities\task;
 
+use pocketmine\block\Block;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector2;
@@ -31,6 +33,11 @@ use revivalpmmp\pureentities\utils\PeTimings;
 
 
 class AutoSpawnTask extends PluginTask{
+
+	const HOSTILE_CAP_CONSTANT = 70;
+	const PASSIVE_WET_CAP_CONSTANT = 10;
+	const PASSIVE_DRY_CAP_CONSTANT = 15;
+	const AMBIENT_CAP_CONSTANT = 5;
 
 	private $plugin;
 	private $spawnerWorlds = [];
@@ -61,9 +68,9 @@ class AutoSpawnTask extends PluginTask{
 			$this->passiveDryMobs = 0;
 			$this->passiveWetMobs = 0;
 
-
+			// For now, spawning as overworld only.
 			foreach($level->getEntities() as $entity) {
-				if(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::HOSTILE_MOBS)){
+				if(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::OVERWORLD_HOSTILE_MOBS)){
 					$this->hostileMobs++;
 				} elseif(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::PASSIVE_DRY_MOBS)) {
 					$this->passiveDryMobs++;
@@ -77,7 +84,7 @@ class AutoSpawnTask extends PluginTask{
 			$total = ($this->hostileMobs + $this->passiveWetMobs + $this->passiveDryMobs);
 
 			if($total >= $this->mobCap) {
-				PureEntities::logOutput("AutoSpawnTask: Stopping AutoSpawn due to MobCap");
+				PureEntities::logOutput("AutoSpawnTask: Stopping AutoSpawn due to MobCap", PureEntities::NORM);
 				PureEntities::logOutput("AutoSpawnTask: Mob Total = $total");
 
 				PeTimings::stopTiming("AutoSpawnTask");
@@ -95,7 +102,7 @@ class AutoSpawnTask extends PluginTask{
 						 * spawn locations can be compared to player locations to meet
 						 * distance requirements.
 						 */
-						array_push($playerLocations, $player->asVector3());
+						array_push($playerLocations, $player->getPosition());
 					}
 				}
 
@@ -111,25 +118,20 @@ class AutoSpawnTask extends PluginTask{
 				// List of chunks eligible to spawn new mobs.
 				$spawnMap = $this->generateSpawnMap($playerLocations);
 
+				PureEntities::logOutput("AutoSpawnTask: Spawn Map generated.", PureEntities::NORM);
 
-				foreach($spawnMap as $chunk){
-					$center = $this->getRandomLocationInChunk(new Vector2($chunk[0], $chunk[1]));
-					$mob = null;
-					$type = null;
-					if($this->spawnFriendlyMobsAllowed and mt_rand(0,1) === 1){
-						// TODO: Spawn water creatures.
-						$mob = Data::PASSIVE_DRY_MOBS[array_rand(Data::PASSIVE_DRY_MOBS)];
-
-						$type = "passive";
-					} else {
-						$mob = Data::HOSTILE_MOBS[array_rand(Data::HOSTILE_MOBS)];
-						$type = "hostile";
-					}
-
-					$mobId = Data::NETWORK_IDS[$mob];
-
-					if($this->isValidPackCenter($center, $level)){
-						$this->spawnPackToLevel($center, $mobId, $level, $type);
+				if(count($spawnMap) > 0){
+					PureEntities::logOutput("AutoSpawnTask: Spawn Map is populated.", PureEntities::NORM);
+					foreach($spawnMap as $chunk){
+						// TODO Find source of null chunks
+						if($chunk != null){
+							if($this->spawnFriendlyMobsAllowed and mt_rand(0, 1) === 1){
+								// TODO: Spawn water creatures.
+								$this->spawnPassiveMob($chunk, $level);
+							}else{
+								$this->spawnHostileMob($chunk, $level);
+							}
+						}
 					}
 				}
 
@@ -155,26 +157,39 @@ class AutoSpawnTask extends PluginTask{
 		if(count($playerLocations) > 0) {
 			// This will take the location of each player, determine what chunk
 			// they are in, and store the chunk in $convertedChunkList.
+
+			/**
+			 * @var Position $playerPos
+			 */
 			foreach($playerLocations as $playerPos) {
-				$chunk = $this->convertPositionToChunk($playerPos);
+
+				$chunkHash = Level::chunkHash($playerPos->x >> 4, $playerPos->z >> 4);
+
 
 				// If the chunk is already in the list, there's no need to add it again.
-				// This method may need to be updated as it compares 2 Vector2 objects which may not work.
-				if(!in_array($chunk, $convertedChunkList)){
-					array_push($convertedChunkList, $chunk);
+				if(!isset($convertedChunkList[$chunkHash])){
+					$convertedChunkList[$chunkHash] = $playerPos->getLevel()->getChunk($playerPos->x >> 4, $playerPos->z >> 4);
+					PureEntities::logOutput("AutoSpawnTask: Chunk added to convertedChunkList.", PureEntities::NORM);
 				}
 			}
 
-			/*
+			/**
 			 * Add a 15x15 group of chunks centered around each player to the spawn map.
 			 * This will avoid adding duplicate chunks when players are in close proximity
 			 * to one another.
+			 *
+			 * @var Chunk $chunk
 			 */
 			foreach($convertedChunkList as $chunk){
 				for($x = -7; $x <= 7; $x++) {
 					for($z = -7; $z <= 7; $z++){
-						if(!in_array(array(($chunk->x + $x),($chunk->y + $z)), $spawnMap)){
-							array_push($spawnMap, array(($chunk->x + $x),($chunk->y + $z)));
+						$trialX = $chunk->getX() + $x;
+						$trialZ = $chunk->getZ() + $z;
+						PureEntities::logOutput("AutoSpawnTask: Testing Chunk X: $trialX, Z: $trialZ.", PureEntities::NORM);
+						$trialChunk = Level::chunkHash($trialX, $trialZ);
+						if(!isset($spawnMap[$trialChunk])){
+							$spawnMap[$trialChunk] = $playerPos->getLevel()->getChunk($trialX,$trialZ);
+							PureEntities::logOutput("AutoSpawnTask: Chunk added to Spawn Map.", PureEntities::NORM);
 						}
 					}
 				}
@@ -183,16 +198,11 @@ class AutoSpawnTask extends PluginTask{
 		return $spawnMap;
 	}
 
-	private function convertPositionToChunk(Vector3 $pos) : Vector2{
-		$x = floor($pos->x / 16);
-		$y = floor($pos->z / 16);
-		return new Vector2($x, $y);
-	}
 
 	/**
 	 * Returns a random (x,y,z) position inside the provided chunk as a Vector3.
 	 *
-	 * @param array $chunk
+	 * @param Vector2 $chunk
 	 * @return Vector3
 	 */
 	private function getRandomLocationInChunk(Vector2 $chunk) : Vector3 {
@@ -222,22 +232,70 @@ class AutoSpawnTask extends PluginTask{
 			$z = mt_rand(-20,20) + $center->z;
 			$pos = new Position($x, $center->y, $z, $level);
 
-			if($this->isValidSpawnLocation($pos)){
-				PureEntities::logOutput("AutoSpawnTask: Spawning Mob to location: $x, $center->y, $z");
+			if($this->isValidDrySpawnLocation($pos)){
+				PureEntities::logOutput("AutoSpawnTask: Spawning Mob to location: $x, $center->y, $z", PureEntities::NORM);
 				$currentPackSize++;
 				return PureEntities::getInstance()->scheduleCreatureSpawn($pos, $entityId, $level, $type, $isBaby) !== null;
 			}
+			PureEntities::logOutput("AutoSpawnTask: Not a valid spawn location.", PureEntities::NORM);
 		}
 		return false;
 
 	}
 
 	private function isValidSpawnLocation(Position $spawnLocation) {
-		if(!$spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y - 1, $spawnLocation->z)->isTransparent()
-			and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y, $spawnLocation->z)->isTransparent()
-			and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->z)->isTransparent()) {
+		if(!$spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y, $spawnLocation->z)->isTransparent()
+			and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->z)->isTransparent()
+			and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 2, $spawnLocation->z)->isTransparent()) {
 			return true;
 		}
 		return false;
+	}
+
+	private function isValidDrySpawnLocation(Position $spawnLocation) {
+		if(!$spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y, $spawnLocation->z)->isTransparent()
+			and ($spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->z)->isTransparent() and
+				$spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 1, $spawnLocation->z)->getId() != Block::WATER)
+			and ($spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 2, $spawnLocation->z)->isTransparent()
+				and $spawnLocation->level->getBlockAt($spawnLocation->x, $spawnLocation->y + 2, $spawnLocation->z)->getId() != Block::WATER)
+			) {
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * This finds a random location in the chunk to act as a pack spawn center
+	 * then attempts to spawn a pack based on passive mob conditions.
+	 * @param Chunk $chunk
+	 * @param Level $level
+	 */
+	private function spawnPassiveMob(Chunk $chunk, Level $level) {
+		PureEntities::logOutput("AutoSpawnTask: Attempting to spawn passive mob.", PureEntities::NORM);
+		$packCenter = $this->getRandomLocationInChunk(new Vector2($chunk->getX(), $chunk->getZ()));
+		$lightLevel = $level->getFullLightAt($packCenter->x, $packCenter->y, $packCenter->z);
+		if($this->isValidPackCenter($packCenter, $level) and $lightLevel > 7) {
+			$mobId = Data::NETWORK_IDS[Data::PASSIVE_DRY_MOBS[array_rand(Data::PASSIVE_DRY_MOBS)]];
+			$this->spawnPackToLevel($packCenter, $mobId, $level, "passive");
+		}
+		PureEntities::logOutput("AutoSpawnTask: Not a valid pack center.", PureEntities::NORM);
+
+	}
+
+	private function spawnHostileMob(Chunk $chunk, Level $level) {
+		PureEntities::logOutput("AutoSpawnTask: Attempting to spawn hostile mob.", PureEntities::NORM);
+		$packCenter = $this->getRandomLocationInChunk(new Vector2($chunk->getX(), $chunk->getZ()));
+		PureEntities::logOutput("AutoSpawnTask: Chosen Pack Center at $packCenter->x, $packCenter->y, $packCenter->z.", PureEntities::NORM);
+		$lightLevel = $level->getFullLightAt($packCenter->x, $packCenter->y, $packCenter->z);
+		PureEntities::logOutput("AutoSpawnTask: light level at trial pack center is $lightLevel", PureEntities::NORM);
+		if($this->isValidPackCenter($packCenter, $level) and $lightLevel < 7) {
+
+			PureEntities::logOutput("AutoSpawnTask: light level at valid pack center is $lightLevel", PureEntities::NORM);
+			$mobId = Data::NETWORK_IDS[Data::OVERWORLD_HOSTILE_MOBS[array_rand(Data::OVERWORLD_HOSTILE_MOBS)]];
+			$this->spawnPackToLevel($packCenter, $mobId, $level, "hostile");
+		}
+		PureEntities::logOutput("AutoSpawnTask: Not a valid pack center.", PureEntities::NORM);
+
 	}
 }
