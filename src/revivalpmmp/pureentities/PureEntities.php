@@ -21,16 +21,28 @@ namespace revivalpmmp\pureentities;
 use pocketmine\command\Command;
 use pocketmine\command\CommandExecutor;
 use pocketmine\command\CommandSender;
-use pocketmine\math\Vector3;
+use pocketmine\entity\Entity;
+use pocketmine\item\Item;
+use pocketmine\level\Location;
+use pocketmine\level\Position;
+use pocketmine\level\Level;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
+use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\ThreadManager;
+use pocketmine\tile\Tile;
+use pocketmine\utils\TextFormat;
 use revivalpmmp\pureentities\data\Color;
+use revivalpmmp\pureentities\entity\animal\flying\Bat;
 use revivalpmmp\pureentities\entity\animal\flying\Parrot;
 use revivalpmmp\pureentities\entity\animal\swimming\Squid;
+use revivalpmmp\pureentities\entity\animal\walking\Llama;
+use revivalpmmp\pureentities\entity\animal\walking\SkeletonHorse;
 use revivalpmmp\pureentities\entity\BaseEntity;
-use revivalpmmp\pureentities\entity\monster\jumping\MagmaCube;
-use revivalpmmp\pureentities\entity\monster\jumping\Slime;
 use revivalpmmp\pureentities\entity\animal\walking\Villager;
 use revivalpmmp\pureentities\entity\animal\walking\Horse;
 use revivalpmmp\pureentities\entity\animal\walking\Mule;
@@ -44,39 +56,37 @@ use revivalpmmp\pureentities\entity\animal\jumping\Rabbit;
 use revivalpmmp\pureentities\entity\animal\walking\Sheep;
 use revivalpmmp\pureentities\entity\monster\flying\Blaze;
 use revivalpmmp\pureentities\entity\monster\flying\Ghast;
+use revivalpmmp\pureentities\entity\monster\flying\Vex;
+use revivalpmmp\pureentities\entity\monster\jumping\MagmaCube;
+use revivalpmmp\pureentities\entity\monster\jumping\Slime;
 use revivalpmmp\pureentities\entity\monster\walking\CaveSpider;
 use revivalpmmp\pureentities\entity\monster\walking\Creeper;
 use revivalpmmp\pureentities\entity\monster\walking\Enderman;
+use revivalpmmp\pureentities\entity\monster\walking\Endermite;
+use revivalpmmp\pureentities\entity\monster\walking\Evoker;
 use revivalpmmp\pureentities\entity\monster\walking\IronGolem;
 use revivalpmmp\pureentities\entity\monster\walking\PigZombie;
+use revivalpmmp\pureentities\entity\monster\walking\PolarBear;
+use revivalpmmp\pureentities\entity\monster\walking\Shulker;
 use revivalpmmp\pureentities\entity\monster\walking\Silverfish;
 use revivalpmmp\pureentities\entity\monster\walking\Skeleton;
+use revivalpmmp\pureentities\entity\monster\walking\Vindicator;
+use revivalpmmp\pureentities\entity\monster\walking\Witch;
 use revivalpmmp\pureentities\entity\monster\walking\WitherSkeleton;
 use revivalpmmp\pureentities\entity\monster\walking\SnowGolem;
 use revivalpmmp\pureentities\entity\monster\walking\Spider;
 use revivalpmmp\pureentities\entity\monster\walking\Wolf;
 use revivalpmmp\pureentities\entity\monster\walking\Zombie;
+use revivalpmmp\pureentities\entity\monster\walking\ZombiePigman;
 use revivalpmmp\pureentities\entity\monster\walking\ZombieVillager;
 use revivalpmmp\pureentities\entity\monster\walking\Husk;
 use revivalpmmp\pureentities\entity\monster\walking\Stray;
 use revivalpmmp\pureentities\entity\projectile\FireBall;
+use revivalpmmp\pureentities\event\CreatureSpawnEvent;
 use revivalpmmp\pureentities\event\EventListener;
 use revivalpmmp\pureentities\features\IntfCanBreed;
 use revivalpmmp\pureentities\features\IntfTameable;
 use revivalpmmp\pureentities\task\AutoSpawnTask;
-use revivalpmmp\pureentities\event\CreatureSpawnEvent;
-use pocketmine\entity\Entity;
-use pocketmine\item\Item;
-use pocketmine\level\Location;
-use pocketmine\level\Position;
-use pocketmine\level\Level;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\ListTag;
-use pocketmine\nbt\tag\FloatTag;
-use pocketmine\plugin\PluginBase;
-use pocketmine\tile\Tile;
-use pocketmine\utils\TextFormat;
 use revivalpmmp\pureentities\task\EndermanLookingTask;
 use revivalpmmp\pureentities\task\InteractionTask;
 use revivalpmmp\pureentities\tile\Spawner;
@@ -125,42 +135,55 @@ class PureEntities extends PluginBase implements CommandExecutor{
 
 	public function onLoad(){
 		self::$registeredClasses = [
-			Stray::class,
-			Husk::class,
-			Horse::class,
-			Donkey::class,
-			Mule::class,
-			//ElderGuardian::class,
-			//Guardian::class,
-			//Bat::class,
-			Parrot::class,
-			Squid::class,
-			Villager::class,
+			Bat::class,
 			Blaze::class,
 			CaveSpider::class,
 			Chicken::class,
 			Cow::class,
 			Creeper::class,
+			Donkey::class,
+			//ElderGuardian::class,
+			//EnderCharge::class,
+			//EnderDragon::class,
 			Enderman::class,
+			Endermite::class,
+			Evoker::class,
+			FireBall::class,
 			Ghast::class,
+			//Guardian::class,
+			Horse::class,
+			Husk::class,
 			IronGolem::class,
+			Llama::class,
 			MagmaCube::class,
 			Mooshroom::class,
+			Mule::class,
 			Ocelot::class,
+			Parrot::class,
 			Pig::class,
 			PigZombie::class,
+			PolarBear::class,
 			Rabbit::class,
 			Sheep::class,
+			Shulker::class,
 			Silverfish::class,
 			Skeleton::class,
-			WitherSkeleton::class,
+			SkeletonHorse::class,
 			Slime::class,
 			SnowGolem::class,
 			Spider::class,
+			Squid::class,
+			Stray::class,
+			Vex::class,
+			Villager::class,
+			Vindicator::class,
+			Witch::class,
+			//Wither::class
+			WitherSkeleton::class,
 			Wolf::class,
 			Zombie::class,
-			ZombieVillager::class,
-			FireBall::class
+			ZombiePigman::class,
+			ZombieVillager::class
 		];
 
 

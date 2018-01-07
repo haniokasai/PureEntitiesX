@@ -18,7 +18,10 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use pocketmine\item\ItemFactory;
 use pocketmine\item\ItemIds;
+use pocketmine\item\Sword;
+use pocketmine\item\TieredTool;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\components\MobEquipment;
 use revivalpmmp\pureentities\entity\monster\Monster;
@@ -37,11 +40,15 @@ use revivalpmmp\pureentities\traits\Breedable;
 use revivalpmmp\pureentities\traits\Feedable;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
-class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monster {
+class ZombiePigman extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monster {
+
+	// Base Derived from Zombie
+	// TODO Update Methods to be Zombie Pigman Specific
+	// TODO Add Golden Sword
 
 
 	use Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["zombie"];
+	const NETWORK_ID = Data::NETWORK_IDS["zombie_pigman"];
 
 	/**
 	 * @var MobEquipment
@@ -53,7 +60,7 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	 *
 	 * @var array
 	 */
-	private $pickUpLoot = [ItemIds::IRON_SWORD, ItemIds::IRON_SHOVEL];
+	private $pickUpLoot = [];
 
 	public function initEntity(){
 		parent::initEntity();
@@ -69,6 +76,9 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 
 		$this->breedableClass = new BreedingComponent($this);
 		$this->breedableClass->init();
+		$this->mobEquipment->setMainHand(Item::get(ItemIds::GOLDEN_SWORD));
+		$this->mobEquipment->sendHandItemsToAllClients();
+
 	}
 
 	/**
@@ -80,7 +90,7 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	}
 
 	public function getName() : string{
-		return "Zombie";
+		return "ZombiePigman";
 	}
 
 	public function setHealth(float $amount){
@@ -190,7 +200,9 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	}
 
 	public function getKillExperience() : int{
-		// adult: 5, baby: 12
+		if($this->getBreedingComponent()->isBaby()) {
+			return 12;
+		}
 		return 5;
 	}
 

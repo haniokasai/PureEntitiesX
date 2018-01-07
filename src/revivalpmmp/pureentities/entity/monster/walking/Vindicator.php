@@ -37,23 +37,18 @@ use revivalpmmp\pureentities\traits\Breedable;
 use revivalpmmp\pureentities\traits\Feedable;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
-class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monster {
+class Vindicator extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monster {
 
-
+	// Base framework created from Zombie
+	// TODO Create Vindicator specific methods
 	use Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["zombie"];
+	const NETWORK_ID = Data::NETWORK_IDS["vindicator"];
 
 	/**
 	 * @var MobEquipment
 	 */
 	private $mobEquipment;
-
-	/**
-	 * Not a complete list yet ...
-	 *
-	 * @var array
-	 */
-	private $pickUpLoot = [ItemIds::IRON_SWORD, ItemIds::IRON_SHOVEL];
+	private $pickUpLoot = [];
 
 	public function initEntity(){
 		parent::initEntity();
@@ -165,23 +160,6 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 
 	public function getDrops() : array{
 		$drops = [];
-		if($this->isLootDropAllowed()){
-			array_push($drops, Item::get(Item::ROTTEN_FLESH, 0, mt_rand(0, 2)));
-			// 2.5 percent chance of dropping one of these items.
-			if(mt_rand(1, 1000) % 25 == 0){
-				switch(mt_rand(1, 3)){
-					case 1:
-						array_push($drops, Item::get(Item::CARROT, 0, 1));
-						break;
-					case 2:
-						array_push($drops, Item::get(Item::POTATO, 0, 1));
-						break;
-					case 3:
-						array_push($drops, Item::get(Item::IRON_INGOT, 0, 1));
-						break;
-				}
-			}
-		}
 		return $drops;
 	}
 

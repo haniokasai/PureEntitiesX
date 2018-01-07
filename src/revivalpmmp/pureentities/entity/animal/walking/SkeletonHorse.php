@@ -25,8 +25,13 @@ use pocketmine\Player;
 use pocketmine\entity\Creature;
 use revivalpmmp\pureentities\data\Data;
 
-class Donkey extends WalkingAnimal implements Rideable{
-	const NETWORK_ID = Data::NETWORK_IDS["donkey"];
+class SkeletonHorse extends WalkingAnimal implements Rideable{
+
+	// Base created from Horse
+	// TODO Implement specific Methods for Skeleton Horse.
+
+	const NETWORK_ID = Data::NETWORK_IDS["skeleton_horse"];
+
 
 	public function initEntity(){
 		parent::initEntity();
@@ -35,12 +40,12 @@ class Donkey extends WalkingAnimal implements Rideable{
 	}
 
 	public function getName() : string{
-		return "Donkey";
+		return "SkeletonHorse";
 	}
 
 	public function targetOption(Creature $creature, float $distance) : bool{
 		if($creature instanceof Player){
-			return $creature->spawned && $creature->isAlive() && !$creature->isClosed() && $creature->getInventory()->getItemInHand()->getId() == Item::WHEAT && $distance <= 49;
+			return $creature->spawned && $creature->isAlive() && !$creature->isClosed() && $creature->getInventory()->getItemInHand()->getId() == Item::APPLE && $distance <= 49;
 		}
 		return false;
 	}
@@ -58,7 +63,6 @@ class Donkey extends WalkingAnimal implements Rideable{
 	}
 
 	public function getKillExperience() : int{
-		// babies drop more, to be implemented
 		return mt_rand(1, 3);
 	}
 
@@ -68,5 +72,4 @@ class Donkey extends WalkingAnimal implements Rideable{
 	public function getRidePosition(){
 		return null;
 	}
-
 }

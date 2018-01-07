@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -28,7 +29,7 @@ use pocketmine\level\Level;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
-class ZombieVillager extends WalkingMonster{
+class ZombieVillager extends WalkingMonster implements Monster{
 	const NETWORK_ID = Data::NETWORK_IDS["zombie_villager"];
 
 	public function initEntity(){

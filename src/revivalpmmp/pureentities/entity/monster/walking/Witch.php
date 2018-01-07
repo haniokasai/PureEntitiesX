@@ -37,23 +37,12 @@ use revivalpmmp\pureentities\traits\Breedable;
 use revivalpmmp\pureentities\traits\Feedable;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
-class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monster {
+class Witch extends WalkingMonster implements Monster{
 
+	// Witch class was based from Zombie class.
+	// TODO Update methods to be specific to Witches instead of Zombies.
 
-	use Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["zombie"];
-
-	/**
-	 * @var MobEquipment
-	 */
-	private $mobEquipment;
-
-	/**
-	 * Not a complete list yet ...
-	 *
-	 * @var array
-	 */
-	private $pickUpLoot = [ItemIds::IRON_SWORD, ItemIds::IRON_SHOVEL];
+	const NETWORK_ID = Data::NETWORK_IDS["witch"];
 
 	public function initEntity(){
 		parent::initEntity();
@@ -61,14 +50,6 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 		$this->height = Data::HEIGHTS[self::NETWORK_ID];
 		$this->speed = 1.1;
 		$this->setDamage([0, 2, 3, 4]);
-
-		$this->mobEquipment = new MobEquipment($this);
-		$this->mobEquipment->init();
-
-		$this->feedableItems = [];
-
-		$this->breedableClass = new BreedingComponent($this);
-		$this->breedableClass->init();
 	}
 
 	/**
@@ -80,7 +61,7 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	}
 
 	public function getName() : string{
-		return "Zombie";
+		return "Witch";
 	}
 
 	public function setHealth(float $amount){
@@ -100,7 +81,7 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	}
 
 	/**
-	 * Zombie gets attacked. We need to recalculate the damage done with reducing the damage by armor type.
+	 * Witch gets attacked. We need to recalculate the damage done with reducing the damage by armor type.
 	 *
 	 * @param EntityDamageEvent $source
 	 */
@@ -108,9 +89,6 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 		$damage = $this->getDamage();
 		PureEntities::logOutput("$this: attacked with original damage of $damage", PureEntities::DEBUG);
 		$reduceDamagePercent = 0;
-		if($this->getMobEquipment() !== null){
-			$reduceDamagePercent = $this->getMobEquipment()->getArmorDamagePercentToReduce();
-		}
 		if($reduceDamagePercent > 0){
 			$reduceBy = $damage * $reduceDamagePercent / 100;
 			PureEntities::logOutput("$this: reduce damage by $reduceBy", PureEntities::DEBUG);
@@ -123,7 +101,7 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	}
 
 	/**
-	 * This zombie attacks a player
+	 * This witch attacks a player
 	 *
 	 * @param Entity $player
 	 */
@@ -133,9 +111,6 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 			// maybe this needs some rework ... as it should be calculated within the event class and take
 			// mob's weapon into account. for now, i just add the damage from the weapon the mob wears
 			$damage = $this->getDamage();
-			if($this->getMobEquipment() !== null){
-				$damage = $damage + $this->getMobEquipment()->getWeaponDamageToAdd();
-			}
 			$ev = new EntityDamageByEntityEvent($this, $player, EntityDamageEvent::CAUSE_ENTITY_ATTACK,
 				MobDamageCalculator::calculateFinalDamage($player, $damage));
 			$player->attack($ev);
@@ -147,8 +122,6 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	public function entityBaseTick(int $tickDiff = 1) : bool{
 		if($this->isClosed()) return false;
 		Timings::$timerEntityBaseTick->startTiming();
-
-		$this->getMobEquipment()->entityBaseTick($tickDiff);
 
 		$hasUpdate = parent::entityBaseTick($tickDiff);
 
@@ -166,18 +139,29 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	public function getDrops() : array{
 		$drops = [];
 		if($this->isLootDropAllowed()){
-			array_push($drops, Item::get(Item::ROTTEN_FLESH, 0, mt_rand(0, 2)));
 			// 2.5 percent chance of dropping one of these items.
 			if(mt_rand(1, 1000) % 25 == 0){
 				switch(mt_rand(1, 3)){
 					case 1:
-						array_push($drops, Item::get(Item::CARROT, 0, 1));
+						array_push($drops, Item::get(Item::GLASS_BOTTLE, 0, 1));
 						break;
 					case 2:
-						array_push($drops, Item::get(Item::POTATO, 0, 1));
+						array_push($drops, Item::get(Item::GLOWSTONE_DUST, 0, 1));
 						break;
 					case 3:
-						array_push($drops, Item::get(Item::IRON_INGOT, 0, 1));
+						array_push($drops, Item::get(Item::GUNPOWDER, 0, 1));
+						break;
+					case 4:
+						array_push($drops, Item::get(Item::REDSTONE, 0, 1));
+						break;
+					case 5:
+						array_push($drops, Item::get(Item::SPIDER_EYE, 0, 1));
+						break;
+					case 6:
+						array_push($drops, Item::get(Item::SUGAR, 0, 1));
+						break;
+					case 7:
+						array_push($drops, Item::get(Item::STICK, 0, 1));
 						break;
 				}
 			}
@@ -192,23 +176,6 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 	public function getKillExperience() : int{
 		// adult: 5, baby: 12
 		return 5;
-	}
-
-
-	// -------------------- equipment methods --------------------
-
-	/**
-	 * @return MobEquipment
-	 */
-	public function getMobEquipment() : MobEquipment{
-		return $this->mobEquipment;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getPickupLoot() : array{
-		return $this->pickUpLoot;
 	}
 
 }

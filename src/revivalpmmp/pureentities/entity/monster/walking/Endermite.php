@@ -18,67 +18,41 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
-use pocketmine\item\ItemFactory;
-use pocketmine\item\ItemIds;
-use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
-use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\item\Item;
-use pocketmine\Player;
+use pocketmine\event\entity\EntityDamageEvent;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
-class WitherSkeleton extends WalkingMonster{
-	const NETWORK_ID = Data::NETWORK_IDS["wither_skeleton"];
+class Endermite extends WalkingMonster{
+	const NETWORK_ID = Data::NETWORK_IDS["endermite"];
+
+	// Base created from Silverfish
+	// TODO Update Endermite specifics
+
 
 	public function initEntity(){
 		parent::initEntity();
 		$this->width = Data::WIDTHS[self::NETWORK_ID];
 		$this->height = Data::HEIGHTS[self::NETWORK_ID];
+		$this->speed = 1.4;
 
-		$this->setDamage([0, 3, 4, 6]);
+		$this->setMaxDamage(1);
+		$this->setDamage([0, 1, 1, 1]);
 	}
 
 	public function getName() : string{
-		return "Wither Skeleton";
-	}
-
-	public function setHealth(float $amount){
-		parent::setHealth($amount);
-
-		if($this->isAlive()){
-			if(15 < $this->getHealth()){
-				$this->setDamage([0, 2, 3, 4]);
-			}else if(10 < $this->getHealth()){
-				$this->setDamage([0, 3, 4, 6]);
-			}else if(5 < $this->getHealth()){
-				$this->setDamage([0, 3, 5, 7]);
-			}else{
-				$this->setDamage([0, 4, 6, 9]);
-			}
-		}
-	}
-
-	public function spawnTo(Player $player){
-		parent::spawnTo($player);
-
-		$pk = new MobEquipmentPacket();
-		$pk->entityRuntimeId = $this->getId();
-		$pk->item = ItemFactory::get(ItemIds::STONE_SWORD);
-		$pk->inventorySlot = 10;
-		$pk->hotbarSlot = 10;
-		$player->dataPacket($pk);
+		return "Endermite";
 	}
 
 	/**
-	 * Attack a player
+	 * Attack the player
 	 *
 	 * @param Entity $player
 	 */
 	public function attackEntity(Entity $player){
-		if($this->attackDelay > 10 && $this->distanceSquared($player) < 2){
+		if($this->attackDelay > 10 && $this->distanceSquared($player) < 1){
 			$this->attackDelay = 0;
 
 			$ev = new EntityDamageByEntityEvent($this, $player, EntityDamageEvent::CAUSE_ENTITY_ATTACK,
@@ -90,25 +64,16 @@ class WitherSkeleton extends WalkingMonster{
 	}
 
 	public function getDrops() : array{
-		$drops = [];
-		if($this->isLootDropAllowed()){
-			array_push($drops, Item::get(Item::COAL, 0, mt_rand(0, 1)));
-			array_push($drops, Item::get(Item::BONE, 0, mt_rand(0, 2)));
-			switch(mt_rand(0, 8)){
-				case 1:
-					array_push($drops, Item::get(Item::MOB_HEAD, 1, mt_rand(0, 2)));
-					break;
-			}
-		}
-		return $drops;
+		return [];
 	}
 
 	public function getMaxHealth() : int{
-		return 20;
+		return 8;
 	}
 
 	public function getKillExperience() : int{
 		return 5;
 	}
+
 
 }
