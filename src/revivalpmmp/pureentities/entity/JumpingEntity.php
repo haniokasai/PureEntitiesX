@@ -130,7 +130,7 @@ abstract class JumpingEntity extends BaseEntity{
 
 		if(!$isJump){
 			if($this->isOnGround()){
-				if($this->motionX > 0.1 or $this->motionZ > 0.1){
+				if($this->motionX > 0 or $this->motionZ > 0){
 					$this->jump();
 				} else {
 					$this->motionY = 0;

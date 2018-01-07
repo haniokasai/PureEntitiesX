@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\animal\jumping;
 
+use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use revivalpmmp\pureentities\entity\animal\JumpingAnimal;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\data\Data;
@@ -81,7 +82,6 @@ class Rabbit extends JumpingAnimal implements IntfCanBreed, IntfCanInteract, Int
 				array_push($drops, Item::get(Item::RABBIT_FOOT, 0, 1));
 			}
 		}
-
 		return $drops;
 	}
 
@@ -94,5 +94,10 @@ class Rabbit extends JumpingAnimal implements IntfCanBreed, IntfCanInteract, Int
 			return mt_rand(1, 4);
 		}
 		return mt_rand(1, 3);
+	}
+
+	public function jump() {
+		$this->broadcastEntityEvent(EntityEventPacket::DUST_PARTICLES);
+		parent::jump();
 	}
 }
