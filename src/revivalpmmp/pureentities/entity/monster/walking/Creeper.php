@@ -19,6 +19,7 @@
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
 use pocketmine\event\entity\ExplosionPrimeEvent;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
@@ -31,7 +32,7 @@ use revivalpmmp\pureentities\PluginConfiguration;
 use revivalpmmp\pureentities\PureEntities;
 
 class Creeper extends WalkingMonster implements Explosive{
-	const NETWORK_ID = Data::NETWORK_IDS["creeper"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["creeper"];
 	const DATA_POWERED = 19;
 
 	private $bombTime = 0;

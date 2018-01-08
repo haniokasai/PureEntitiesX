@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
@@ -34,7 +35,7 @@ class Evoker extends WalkingMonster implements Monster{
 	// Base Framework from Zombie Villager
 	// TODO Update Specific Methods for Evoker
 
-	const NETWORK_ID = Data::NETWORK_IDS["evoker"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["evoker"];
 
 	public function initEntity(){
 		parent::initEntity();

@@ -19,6 +19,7 @@
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
 use revivalpmmp\pureentities\components\BreedingComponent;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
@@ -35,7 +36,7 @@ class PolarBear extends WalkingMonster implements Monster{
 	// Base created from Spider.
 	// TODO udpate Polar Bear specific methods.
 
-	const NETWORK_ID = Data::NETWORK_IDS["polar_bear"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["polar_bear"];
 
 	public function initEntity(){
 		parent::initEntity();

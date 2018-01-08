@@ -20,6 +20,7 @@ namespace revivalpmmp\pureentities\entity\animal\walking;
 
 use pocketmine\level\sound\PopSound;
 use revivalpmmp\pureentities\components\BreedingComponent;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\item\Item;
 use revivalpmmp\pureentities\features\IntfCanBreed;
@@ -33,7 +34,7 @@ use revivalpmmp\pureentities\traits\Feedable;
 class Chicken extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, IntfCanPanic{
 	use Feedable, Breedable, CanPanic;
 
-	const NETWORK_ID = Data::NETWORK_IDS["chicken"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["chicken"];
 
 	// egg laying specific configuration (an egg is laid by a chicken each 6000-120000 ticks)
 	const DROP_EGG_DELAY_MIN = 6000;
@@ -44,7 +45,7 @@ class Chicken extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, In
 
 	public function initEntity(){
 		parent::initEntity();
-		$this->setNetworkId(Data::NETWORK_IDS["chicken"]);
+		$this->setNetworkId(NetworkIDs::NETWORK_IDS["chicken"]);
 		$this->width = Data::WIDTHS[$this->getNetworkId()];
 		$this->height = Data::HEIGHTS[$this->getNetworkId()];
 		$this->eyeHeight = 0.6;

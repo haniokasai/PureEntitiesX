@@ -29,9 +29,10 @@ use pocketmine\entity\Entity;
 use pocketmine\level\Explosion;
 use revivalpmmp\pureentities\data\Data;
 use pocketmine\math\Vector3;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 
 class FireBall extends Projectile{
-	const NETWORK_ID = Data::NETWORK_IDS["fire_ball"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["fire_ball"];
 
 	protected $damage = 4;
 

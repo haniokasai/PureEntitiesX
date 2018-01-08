@@ -19,6 +19,7 @@
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
 use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\item\GoldSword;
@@ -33,7 +34,7 @@ use revivalpmmp\pureentities\PluginConfiguration;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class PigZombie extends WalkingMonster{
-	const NETWORK_ID = Data::NETWORK_IDS["pig_zombie"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["pig_zombie"];
 
 	private $angry = 0;
 	public $eyeHeight = 1.62;

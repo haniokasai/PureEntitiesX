@@ -26,7 +26,8 @@ use pocketmine\level\Position;
 use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
 use pocketmine\scheduler\PluginTask;
-use revivalpmmp\pureentities\data\Data;
+use revivalpmmp\pureentities\data\MobTypeMaps;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\PureEntities;
 use revivalpmmp\pureentities\PluginConfiguration;
 use revivalpmmp\pureentities\utils\PeTimings;
@@ -70,11 +71,11 @@ class AutoSpawnTask extends PluginTask{
 
 			// For now, spawning as overworld only.
 			foreach($level->getEntities() as $entity) {
-				if(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::OVERWORLD_HOSTILE_MOBS)){
+				if(in_array(array_search($entity::NETWORK_ID, NetworkIDs::NETWORK_IDS), MobTypeMaps::OVERWORLD_HOSTILE_MOBS)){
 					$this->hostileMobs++;
-				} elseif(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::PASSIVE_DRY_MOBS)) {
+				} elseif(in_array(array_search($entity::NETWORK_ID, NetworkIDs::NETWORK_IDS), MobTypeMaps::PASSIVE_DRY_MOBS)) {
 					$this->passiveDryMobs++;
-				} elseif(in_array(array_search($entity::NETWORK_ID, Data::NETWORK_IDS), Data::PASSIVE_WET_MOBS)){
+				} elseif(in_array(array_search($entity::NETWORK_ID, NetworkIDs::NETWORK_IDS), MobTypeMaps::PASSIVE_WET_MOBS)){
 					$this->passiveWetMobs++;
 				}
 			}
@@ -276,7 +277,7 @@ class AutoSpawnTask extends PluginTask{
 		$packCenter = $this->getRandomLocationInChunk(new Vector2($chunk->getX(), $chunk->getZ()));
 		$lightLevel = $level->getFullLightAt($packCenter->x, $packCenter->y, $packCenter->z);
 		if($this->isValidPackCenter($packCenter, $level) and $lightLevel > 7) {
-			$mobId = Data::NETWORK_IDS[Data::PASSIVE_DRY_MOBS[array_rand(Data::PASSIVE_DRY_MOBS)]];
+			$mobId = NetworkIDs::NETWORK_IDS[MobTypeMaps::PASSIVE_DRY_MOBS[array_rand(MobTypeMaps::PASSIVE_DRY_MOBS)]];
 			$this->spawnPackToLevel($packCenter, $mobId, $level, "passive");
 		}
 		PureEntities::logOutput("AutoSpawnTask: Not a valid pack center.", PureEntities::NORM);
@@ -292,7 +293,7 @@ class AutoSpawnTask extends PluginTask{
 		if($this->isValidPackCenter($packCenter, $level) and $lightLevel < 7) {
 
 			PureEntities::logOutput("AutoSpawnTask: light level at valid pack center is $lightLevel", PureEntities::NORM);
-			$mobId = Data::NETWORK_IDS[Data::OVERWORLD_HOSTILE_MOBS[array_rand(Data::OVERWORLD_HOSTILE_MOBS)]];
+			$mobId = NetworkIDs::NETWORK_IDS[MobTypeMaps::OVERWORLD_HOSTILE_MOBS[array_rand(MobTypeMaps::OVERWORLD_HOSTILE_MOBS)]];
 			$this->spawnPackToLevel($packCenter, $mobId, $level, "hostile");
 		}
 		PureEntities::logOutput("AutoSpawnTask: Not a valid pack center.", PureEntities::NORM);

@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -26,7 +27,7 @@ use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class Endermite extends WalkingMonster{
-	const NETWORK_ID = Data::NETWORK_IDS["endermite"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["endermite"];
 
 	// Base created from Silverfish
 	// TODO Update Endermite specifics

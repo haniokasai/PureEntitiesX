@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\flying;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\Animal;
 use revivalpmmp\pureentities\entity\BaseEntity;
 use revivalpmmp\pureentities\entity\monster\FlyingMonster;
@@ -44,7 +45,7 @@ class Vex extends FlyingMonster implements Monster{
 
 	// Base created from Blaze
 	// TODO create methods specific to Vexes
-	const NETWORK_ID = Data::NETWORK_IDS["vex"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["vex"];
 
 	public function initEntity(){
 		parent::initEntity();

@@ -18,7 +18,9 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use pocketmine\entity\projectile\Projectile;
 use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\entity\projectile\ProjectileSource;
@@ -37,7 +39,7 @@ use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 
 class Skeleton extends WalkingMonster implements ProjectileSource{
-	const NETWORK_ID = Data::NETWORK_IDS["skeleton"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["skeleton"];
 
 	public function initEntity(){
 		parent::initEntity();

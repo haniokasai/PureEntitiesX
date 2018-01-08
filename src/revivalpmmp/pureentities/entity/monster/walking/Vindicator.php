@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\monster\walking;
 use pocketmine\item\ItemIds;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\components\MobEquipment;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
@@ -42,7 +43,7 @@ class Vindicator extends WalkingMonster implements IntfCanEquip, IntfCanBreed, M
 	// Base framework created from Zombie
 	// TODO Create Vindicator specific methods
 	use Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["vindicator"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["vindicator"];
 
 	/**
 	 * @var MobEquipment

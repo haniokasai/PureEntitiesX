@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\monster\walking;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\nbt\tag\IntTag;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\entity\projectile\ProjectileSource;
@@ -41,7 +42,7 @@ use revivalpmmp\pureentities\traits\Shearable;
 
 class SnowGolem extends WalkingMonster implements ProjectileSource, IntfCanInteract, IntfShearable{
 	use Shearable;
-	const NETWORK_ID = Data::NETWORK_IDS["snow_golem"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["snow_golem"];
 
 	const NBT_KEY_PUMPKIN = "Pumpkin"; // 1 or 0 (true/false) - hat on or off ;)
 

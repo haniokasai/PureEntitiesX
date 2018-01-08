@@ -22,6 +22,7 @@ use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\walking\Cow;
 use revivalpmmp\pureentities\entity\animal\walking\Mooshroom;
 use revivalpmmp\pureentities\entity\animal\walking\Sheep;
@@ -72,7 +73,7 @@ trait Shearable{
 			/**
 			 * @var Cow $newCow
 			 */
-			$newCow = PureEntities::create(Data::NETWORK_IDS["cow"], $this->asLocation());
+			$newCow = PureEntities::create(NetworkIDs::NETWORK_IDS["cow"], $this->asLocation());
 			$loaded = false;
 			while(!$loaded){
 				$newCow->setPosition($this->asVector3());

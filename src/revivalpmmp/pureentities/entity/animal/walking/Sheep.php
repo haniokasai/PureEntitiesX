@@ -25,6 +25,7 @@ use pocketmine\block\Grass;
 use pocketmine\block\TallGrass;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use revivalpmmp\pureentities\components\BreedingComponent;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\ByteTag;
@@ -44,7 +45,7 @@ use revivalpmmp\pureentities\traits\Shearable;
 
 class Sheep extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, IntfShearable, IntfCanPanic{
 	use Breedable, CanPanic, Feedable, Shearable;
-	const NETWORK_ID = Data::NETWORK_IDS["sheep"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["sheep"];
 
 	const DATA_COLOR_INFO = 16;
 

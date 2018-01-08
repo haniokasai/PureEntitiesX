@@ -20,6 +20,7 @@ namespace revivalpmmp\pureentities\traits;
 
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\data\Data;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 
 trait Breedable{
 
@@ -33,6 +34,6 @@ trait Breedable{
 	}
 
 	public function getNetworkId(){
-		return Data::NETWORK_IDS[strtolower($this->getName())];
+		return NetworkIDs::NETWORK_IDS[strtolower($this->getName())];
 	}
 }

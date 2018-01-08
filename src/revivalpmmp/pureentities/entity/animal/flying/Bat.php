@@ -19,12 +19,13 @@
 namespace revivalpmmp\pureentities\entity\animal\flying;
 
 use revivalpmmp\pureentities\data\Data;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\FlyingAnimal;
 use pocketmine\entity\Creature;
 
 class Bat extends FlyingAnimal{
 	//TODO implement
-	const NETWORK_ID = Data::NETWORK_IDS["bat"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["bat"];
 
 	public function initEntity(){
 		parent::initEntity();

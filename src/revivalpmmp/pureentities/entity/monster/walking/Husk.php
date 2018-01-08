@@ -19,6 +19,7 @@
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
 use pocketmine\entity\Effect;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Ageable;
 use pocketmine\entity\Entity;
@@ -29,7 +30,7 @@ use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class Husk extends WalkingMonster implements Ageable{
-	const NETWORK_ID = Data::NETWORK_IDS["husk"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["husk"];
 
 	public function initEntity(){
 		parent::initEntity();

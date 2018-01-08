@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\entity\Rideable;
 use pocketmine\item\Item;
@@ -30,7 +31,7 @@ class SkeletonHorse extends WalkingAnimal implements Rideable{
 	// Base created from Horse
 	// TODO Implement specific Methods for Skeleton Horse.
 
-	const NETWORK_ID = Data::NETWORK_IDS["skeleton_horse"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["skeleton_horse"];
 
 
 	public function initEntity(){

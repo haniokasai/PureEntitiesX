@@ -25,6 +25,7 @@ use pocketmine\Player;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\data\Color;
 use revivalpmmp\pureentities\data\NBTConst;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\jumping\Rabbit;
 use revivalpmmp\pureentities\entity\animal\walking\Sheep;
 use revivalpmmp\pureentities\entity\monster\Monster;
@@ -46,7 +47,7 @@ use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class Wolf extends WalkingMonster implements IntfTameable, IntfCanBreed, IntfCanInteract{
 	use Breedable, Feedable, Tameable;
-	const NETWORK_ID = Data::NETWORK_IDS["wolf"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["wolf"];
 
 	/**
 	 * Teleport distance - when does a tamed wolf start to teleport to it's owner?

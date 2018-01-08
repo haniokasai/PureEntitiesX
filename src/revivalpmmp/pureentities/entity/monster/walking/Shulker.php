@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
@@ -39,7 +40,7 @@ class Shulker extends WalkingMonster implements Monster{
 	// TODO Make Dyeable
 	// TODO Modify Color of Head Based on Source of Spawn
 
-	const NETWORK_ID = Data::NETWORK_IDS["shulker"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["shulker"];
 
 	public function initEntity(){
 		parent::initEntity();

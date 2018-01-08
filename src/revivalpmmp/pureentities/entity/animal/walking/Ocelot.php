@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\animal\walking;
 use pocketmine\entity\Creature;
 use pocketmine\nbt\NBT;
 use revivalpmmp\pureentities\data\NBTConst;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
@@ -50,7 +51,7 @@ use revivalpmmp\pureentities\traits\Tameable;
 
 class Ocelot extends WalkingAnimal implements IntfTameable, IntfCanBreed, IntfCanInteract, IntfCanPanic{
 	use Breedable, CanPanic, Feedable, Tameable;
-	const NETWORK_ID = Data::NETWORK_IDS["ocelot"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["ocelot"];
 
 	private $comfortObjects = array(
 		Item::BED,

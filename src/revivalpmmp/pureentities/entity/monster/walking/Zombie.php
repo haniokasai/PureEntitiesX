@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\monster\walking;
 use pocketmine\item\ItemIds;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\components\MobEquipment;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
@@ -41,7 +42,7 @@ class Zombie extends WalkingMonster implements IntfCanEquip, IntfCanBreed, Monst
 
 
 	use Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["zombie"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["zombie"];
 
 	/**
 	 * @var MobEquipment

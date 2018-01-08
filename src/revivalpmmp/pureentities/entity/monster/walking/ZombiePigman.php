@@ -24,6 +24,7 @@ use pocketmine\item\Sword;
 use pocketmine\item\TieredTool;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\components\MobEquipment;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\Monster;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
@@ -48,7 +49,7 @@ class ZombiePigman extends WalkingMonster implements IntfCanEquip, IntfCanBreed,
 
 
 	use Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["zombie_pigman"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["zombie_pigman"];
 
 	/**
 	 * @var MobEquipment

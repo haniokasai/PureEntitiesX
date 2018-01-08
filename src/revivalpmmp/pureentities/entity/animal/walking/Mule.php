@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\entity\Rideable;
 use pocketmine\item\Item;
@@ -26,7 +27,7 @@ use pocketmine\entity\Creature;
 use revivalpmmp\pureentities\data\Data;
 
 class Mule extends WalkingAnimal implements Rideable{
-	const NETWORK_ID = Data::NETWORK_IDS["mule"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["mule"];
 
 
 	public function initEntity(){

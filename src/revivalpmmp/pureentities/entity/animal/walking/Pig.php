@@ -19,6 +19,7 @@
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
 use revivalpmmp\pureentities\components\BreedingComponent;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\entity\Rideable;
 use pocketmine\item\Item;
@@ -33,7 +34,7 @@ use revivalpmmp\pureentities\traits\Feedable;
 class Pig extends WalkingAnimal implements Rideable, IntfCanBreed, IntfCanInteract, IntfCanPanic{
 
 	use Breedable, CanPanic, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["pig"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["pig"];
 
 
 	public function initEntity(){

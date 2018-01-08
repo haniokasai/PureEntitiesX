@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\animal\walking;
 use pocketmine\nbt\tag\ByteTag;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\data\NBTConst;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\item\Item;
 use revivalpmmp\pureentities\features\IntfCanBreed;
@@ -34,7 +35,7 @@ use revivalpmmp\pureentities\traits\Shearable;
 
 class Mooshroom extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, IntfShearable{
 	use Shearable, Breedable, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["mooshroom"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["mooshroom"];
 
 	public function initEntity(){
 		parent::initEntity();

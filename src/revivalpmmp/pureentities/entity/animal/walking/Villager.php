@@ -18,11 +18,12 @@
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use revivalpmmp\pureentities\data\Data;
 
 class Villager extends WalkingAnimal{
-	const NETWORK_ID = Data::NETWORK_IDS["villager"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["villager"];
 
 	public function initEntity(){
 		parent::initEntity();

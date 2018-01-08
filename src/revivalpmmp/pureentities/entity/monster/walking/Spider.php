@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -29,7 +30,7 @@ use revivalpmmp\pureentities\PureEntities;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class Spider extends WalkingMonster{
-	const NETWORK_ID = Data::NETWORK_IDS["spider"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["spider"];
 
 	public function initEntity(){
 		parent::initEntity();

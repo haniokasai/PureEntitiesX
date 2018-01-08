@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\monster\walking;
 use pocketmine\block\Pumpkin;
 use pocketmine\entity\Creature;
 use pocketmine\Player;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -29,7 +30,7 @@ use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class Enderman extends WalkingMonster{
-	const NETWORK_ID = Data::NETWORK_IDS["enderman"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["enderman"];
 
 	public function initEntity(){
 		parent::initEntity();

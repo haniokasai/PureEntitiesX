@@ -19,6 +19,7 @@
 namespace revivalpmmp\pureentities\entity\monster\flying;
 
 use pocketmine\item\Item;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\FlyingMonster;
 use revivalpmmp\pureentities\entity\projectile\FireBall;
 use revivalpmmp\pureentities\PureEntities;
@@ -33,7 +34,7 @@ use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 
 class Ghast extends FlyingMonster implements ProjectileSource{
-	const NETWORK_ID = Data::NETWORK_IDS["ghast"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["ghast"];
 
 	public function initEntity(){
 		parent::initEntity();

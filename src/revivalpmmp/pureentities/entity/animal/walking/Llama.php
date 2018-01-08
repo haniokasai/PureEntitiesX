@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\entity\Rideable;
 use pocketmine\item\Item;
@@ -30,7 +31,7 @@ class Llama extends WalkingAnimal implements Rideable{
 	// Base generated from Horse
 	// TODO Implement Llama Specific Methods (eg. spit)
 
-	const NETWORK_ID = Data::NETWORK_IDS["llama"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["llama"];
 
 
 	public function initEntity(){

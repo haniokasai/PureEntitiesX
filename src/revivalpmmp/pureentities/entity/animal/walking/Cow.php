@@ -20,6 +20,7 @@ namespace revivalpmmp\pureentities\entity\animal\walking;
 
 use pocketmine\Player;
 use revivalpmmp\pureentities\components\BreedingComponent;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\item\Item;
 use revivalpmmp\pureentities\features\IntfCanBreed;
@@ -35,7 +36,7 @@ use revivalpmmp\pureentities\traits\Feedable;
 class Cow extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, IntfCanPanic{
 
 	use Breedable, CanPanic, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["cow"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["cow"];
 
 	public function initEntity(){
 		parent::initEntity();

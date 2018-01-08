@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\animal\walking;
 
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\data\Data;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 use pocketmine\item\Item;
 use revivalpmmp\pureentities\features\IntfCanBreed;
@@ -33,7 +34,7 @@ use revivalpmmp\pureentities\traits\Feedable;
 class Rabbit extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, IntfCanPanic{
 
 	use Breedable, CanPanic, Feedable;
-	const NETWORK_ID = Data::NETWORK_IDS["rabbit"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["rabbit"];
 
 	public function initEntity(){
 		parent::initEntity();

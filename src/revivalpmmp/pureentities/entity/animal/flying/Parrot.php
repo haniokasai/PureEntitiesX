@@ -20,6 +20,7 @@ namespace revivalpmmp\pureentities\entity\animal\flying;
 
 use pocketmine\entity\Creature;
 use revivalpmmp\pureentities\data\NBTConst;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\FlyingAnimal;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\ByteTag;
@@ -35,7 +36,7 @@ use revivalpmmp\pureentities\traits\Tameable;
 class Parrot extends FlyingAnimal implements IntfTameable, IntfCanInteract{
 	use Tameable;
 
-	const NETWORK_ID = Data::NETWORK_IDS["parrot"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["parrot"];
 	private $birdType; // 0 = red, 1 = blue, 2 = green, 3 = cyan, 4 = silver
 
 	public function initEntity(){

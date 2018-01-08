@@ -18,6 +18,7 @@
 
 namespace revivalpmmp\pureentities\entity\monster\flying;
 
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\Animal;
 use revivalpmmp\pureentities\entity\BaseEntity;
 use revivalpmmp\pureentities\entity\monster\FlyingMonster;
@@ -40,7 +41,7 @@ use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 
 class Blaze extends FlyingMonster implements ProjectileSource{
-	const NETWORK_ID = Data::NETWORK_IDS["blaze"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["blaze"];
 
 	public function initEntity(){
 		parent::initEntity();

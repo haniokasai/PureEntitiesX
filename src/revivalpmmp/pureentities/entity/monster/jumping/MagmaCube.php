@@ -21,6 +21,7 @@ namespace revivalpmmp\pureentities\entity\monster\jumping;
 use pocketmine\item\Item;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\IntTag;
+use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\monster\JumpingMonster;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -30,7 +31,7 @@ use revivalpmmp\pureentities\PluginConfiguration;
 use revivalpmmp\pureentities\utils\MobDamageCalculator;
 
 class MagmaCube extends JumpingMonster{
-	const NETWORK_ID = Data::NETWORK_IDS["magma_cube"];
+	const NETWORK_ID = NetworkIDs::NETWORK_IDS["magma_cube"];
 	const NBT_CONST_CUBESIZE = "CubeSize";
 
 	private $cubeSize = -1; // 0 = Tiny, 1 = Small, 2 = Big

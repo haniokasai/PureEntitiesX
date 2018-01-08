@@ -18,6 +18,7 @@
 namespace revivalpmmp\pureentities\traits;
 
 use revivalpmmp\pureentities\features\IntfCanBreed;
+use revivalpmmp\pureentities\features\IntfCanPanic;
 use revivalpmmp\pureentities\PureEntities;
 use revivalpmmp\pureentities\utils\TickCounter;
 
