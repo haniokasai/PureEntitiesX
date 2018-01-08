@@ -20,7 +20,7 @@ namespace revivalpmmp\pureentities\entity\animal\jumping;
 
 use RevivalPMMP\PureEntities\data\NetworkIDs;
 use revivalpmmp\pureentities\entity\animal\JumpingAnimal;
-use revivalpmmp\pureentities\data\Data;               8
+use revivalpmmp\pureentities\data\Data;
 
 class Rabbit extends JumpingAnimal{
 	const NETWORK_ID = NetworkIDs::NETWORK_IDS["rabbit"];
