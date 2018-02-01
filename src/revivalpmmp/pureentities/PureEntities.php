@@ -402,7 +402,7 @@ class PureEntities extends PluginBase implements CommandExecutor{
 	 * @param array         $args
 	 * @return bool
 	 */
-	public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
+	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
 		$commandSuccessful = false;
 
 		switch($command->getName()){
